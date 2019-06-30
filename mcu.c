@@ -9,16 +9,19 @@ sbit lcden = P2 ^ 7;
 sbit lcdrs = P2 ^ 6;
 sbit lcdrw = P2 ^ 5;
 sbit sound = P1 ^ 5;
-uint i, cnt, cnt1; //cnt:ѡ��ͬ���ӽ��е�ʱ���ñ��(�빦�ܼ�key3�й�)
-				   //cnt1:ѡ��ͬ���ӽ�����ʾ���ñ��(�빦�ܼ�key2�й�)
+uint i, cnt, cnt1;
+//date and timer variables
 uint nian = 2019, yue = 6, ri = 28,
 	 hour = 23, hourshi, hourge, min = 59, minshi, minge, sec = 0, secshi, secge,
 	 ahour1 = 6, ahourshi1, ahourge1, amin1 = 30, aminshi1, aminge1,
 	 ahour2, ahourshi2, ahourge2, amin2, aminshi2, aminge2,
 	 ahour3, ahourshi3, ahourge3, amin3 = 50, aminshi3, aminge3,
-	 ahour4 = 23, ahourshi4, ahourge4, amin4 = 30, aminshi4, aminge4; //����ϵͳ���ڡ�ʱ�估�ĸ���ͬ������
-uchar num;															  //��ʱ��������ʱ1s�����ܴ���
-bit flag = 1;														  //�����־λ
+	 ahour4 = 23, ahourshi4, ahourge4, amin4 = 30, aminshi4, aminge4;
+
+uchar num;
+//beep enable flag
+bit flag = 1;
+//what is this? 0~9...
 uchar code table1[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 //uchar code riqi[]="2019-06-26      ";
 uchar code table2[] = "Time 00:00      ";
@@ -26,17 +29,17 @@ uchar code Alarm_1[] = "GB    00:00     ";
 uchar code Alarm_2[] = "SK    00:00     ";
 uchar code Alarm_3[] = "XK    00:00     ";
 uchar code Alarm_4[] = "JQ    00:00     ";
-uchar code keyValue[] = "123456789*0#a"; //���ذ�����ʵֵ��
+uchar code keyValue[] = "123456789*0#a";
 uint key;
-
+//just delay nothing more
 void delay(uint z)
-{ //��ʱz����
+{
 	uint i, j;
 	for (i = z; i > 0; i--)
 		for (j = 110; j > 0; j--)
 			;
 }
-
+//lcd 1602  basic  config function
 void write_com(uchar com)
 {
 	delay(5);
@@ -47,9 +50,9 @@ void write_com(uchar com)
 	delay(5);
 	lcden = 0;
 }
-
+//lcd 1602  basic  write data function
 void write_data(uchar date)
-{ //LCD���ݿ��ƣ�д���ݺ���
+{
 	delay(5);
 	lcdrs = 1;
 	P0 = date;
@@ -60,7 +63,7 @@ void write_data(uchar date)
 }
 
 void write_nian(uchar add, uint date)
-{ //����ʾ����
+{
 	uchar qian, bai, shi, ge;
 	qian = date / 1000;
 	bai = (date - 1000 * qian) / 100;
@@ -74,7 +77,7 @@ void write_nian(uchar add, uint date)
 }
 
 void write_yue(uchar add, uchar date)
-{ //����ʾ����
+{
 	uchar shi, ge;
 	shi = date / 10;
 	ge = date % 10;
@@ -84,7 +87,7 @@ void write_yue(uchar add, uchar date)
 }
 
 void write_ri(uchar add, uchar date)
-{ //����ʾ����
+{
 	uchar shi, ge;
 	shi = date / 10;
 	ge = date % 10;
