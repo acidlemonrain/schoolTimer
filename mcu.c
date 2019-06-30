@@ -38,7 +38,7 @@ void delay(uint z)
 }
 
 void write_com(uchar com)
-{ //LCD������ƣ�дָ���
+{
 	delay(5);
 	lcdrs = 0;
 	P0 = com;
@@ -93,9 +93,9 @@ void write_ri(uchar add, uchar date)
 	write_data(0x30 + ge);
 	write_data(' ');
 }
-
+//display date 20xx-xx-xx
 void qi()
-{ //��ʾ�������ں���
+{
 	write_nian(0, nian);
 	write_yue(5, yue);
 	write_ri(8, ri);
@@ -106,9 +106,9 @@ void qi()
 	write_com(0x80 + 0x40 + 4);
 	write_data('-');
 }
-
+// very important!!
 void scan()
-{ //����ɨ��
+{
 	uchar temp;
 	while (1)
 	{
@@ -216,11 +216,11 @@ void scan()
 		}
 	}
 }
-
+//what is this?
 void time()
-{ //ϵͳʱ��ʱ������
+{
 	do
-	{ //ϵͳʱ�ӡ�ʱ������
+	{
 		write_com(0x0f);
 		delay(2);
 		write_com(0x80 + 5);
@@ -228,7 +228,7 @@ void time()
 		hourshi = key;
 		write_data(keyValue[hourshi - 1]);
 		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
+		{
 			hourshi = 0;
 		}
 		delay(5);
@@ -238,7 +238,7 @@ void time()
 		delay(2);
 		write_data(keyValue[hourge - 1]);
 		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
+		{
 			hourge = 0;
 		}
 	} while (hourshi * 10 + hourge >= 24);
@@ -247,7 +247,7 @@ void time()
 	delay(2);
 	write_data(':');
 	do
-	{ //ϵͳʱ�ӡ��֡�����
+	{
 		write_com(0x0f);
 		delay(2);
 		write_com(0x80 + 8);
@@ -255,7 +255,7 @@ void time()
 		minshi = key;
 		write_data(keyValue[minshi - 1]);
 		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
+		{
 			minshi = 0;
 		}
 		delay(5);
@@ -265,277 +265,38 @@ void time()
 		delay(2);
 		write_data(keyValue[minge - 1]);
 		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
+		{
 			minge = 0;
 		}
 		delay(1);
 	} while (minshi * 10 + minge >= 60);
 	min = minshi * 10 + minge;
-	write_com(0x0c); //������ʾ���ع�꣬����˸
-	TR1 = 1;		 //������ʱ��1
+	write_com(0x0c);
+	TR1 = 1;
 }
 
-void alarm11()
-{ //���õ�һ������
-	do
-	{ //����ʱ�ӡ�ʱ������
-		write_com(0x0f);
-		delay(2);
-		write_com(0x80 + 0x40 + 6);
-		scan();
-		ahourshi1 = key;
-		write_data(keyValue[ahourshi1 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			ahourshi1 = 0;
-		}
-		delay(5);
-		write_com(0x80 + 0x40 + 7);
-		scan();
-		ahourge1 = key;
-		delay(2);
-		write_data(keyValue[ahourge1 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			ahourge1 = 0;
-		}
-	} while (ahourshi1 * 10 + ahourge1 >= 24);
-	ahour1 = ahourshi1 * 10 + ahourge1;
-	write_com(0x80 + 0x40 + 8);
-	delay(2);
-	write_data(':');
-	do
-	{ //ϵͳʱ�ӡ��֡�����
-		write_com(0x0f);
-		delay(2);
-		write_com(0x80 + 0x40 + 9);
-		scan();
-		aminshi1 = key;
-		write_data(keyValue[aminshi1 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			aminshi1 = 0;
-		}
-		delay(5);
-		scan();
-		aminge1 = key;
-		write_com(0x80 + 0x40 + 10);
-		delay(2);
-		write_data(keyValue[aminge1 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			aminge1 = 0;
-		}
-		delay(1);
-	} while (aminshi1 * 10 + aminge1 >= 60);
-	amin1 = aminshi1 * 10 + aminge1;
-	delay(1000);
-	write_com(0x0c); //������ʾ���ع�꣬����˸
-	write_com(0x80 + 0x40);
-	qi(); //��ʾ����
-}
-
-void alarm22()
-{ //���õڶ�������
-	do
-	{ //����ʱ�ӡ�ʱ������
-		write_com(0x0f);
-		delay(2);
-		write_com(0x80 + 0x40 + 6);
-		scan();
-		ahourshi2 = key;
-		write_data(keyValue[ahourshi2 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			ahourshi2 = 0;
-		}
-		delay(5);
-		write_com(0x80 + 0x40 + 7);
-		scan();
-		ahourge2 = key;
-		delay(2);
-		write_data(keyValue[ahourge2 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			ahourge2 = 0;
-		}
-	} while (ahourshi2 * 10 + ahourge2 >= 24);
-	ahour2 = ahourshi2 * 10 + ahourge2;
-	write_com(0x80 + 0x40 + 8);
-	delay(2);
-	write_data(':');
-	do
-	{ //ϵͳʱ�ӡ��֡�����
-		write_com(0x0f);
-		delay(2);
-		write_com(0x80 + 0x40 + 9);
-		scan();
-		aminshi2 = key;
-		write_data(keyValue[aminshi2 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			aminshi2 = 0;
-		}
-		delay(5);
-		scan();
-		aminge2 = key;
-		write_com(0x80 + 0x40 + 10);
-		delay(2);
-		write_data(keyValue[aminge2 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			aminge2 = 0;
-		}
-		delay(1);
-	} while (aminshi2 * 10 + aminge2 >= 60);
-	amin2 = aminshi2 * 10 + aminge2;
-	delay(1000);
-	write_com(0x0c); //������ʾ���ع�꣬����˸
-	write_com(0x80 + 0x40);
-	qi(); //��ʾ����
-}
-
-void alarm33()
-{ //���õ���������
-	do
-	{ //����ʱ�ӡ�ʱ������
-		write_com(0x0f);
-		delay(2);
-		write_com(0x80 + 0x40 + 6);
-		scan();
-		ahourshi3 = key;
-		write_data(keyValue[ahourshi3 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			ahourshi3 = 0;
-		}
-		delay(5);
-		write_com(0x80 + 0x40 + 7);
-		scan();
-		ahourge3 = key;
-		delay(2);
-		write_data(keyValue[ahourge3 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			ahourge3 = 0;
-		}
-	} while (ahourshi3 * 10 + ahourge3 >= 24);
-	ahour3 = ahourshi3 * 10 + ahourge3;
-	write_com(0x80 + 0x40 + 8);
-	delay(2);
-	write_data(':');
-	do
-	{ //ϵͳʱ�ӡ��֡�����
-		write_com(0x0f);
-		delay(2);
-		write_com(0x80 + 0x40 + 9);
-		scan();
-		aminshi3 = key;
-		write_data(keyValue[aminshi3 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			aminshi3 = 0;
-		}
-		delay(5);
-		scan();
-		aminge3 = key;
-		write_com(0x80 + 0x40 + 10);
-		delay(2);
-		write_data(keyValue[aminge3 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			aminge3 = 0;
-		}
-		delay(1);
-	} while (aminshi3 * 10 + aminge3 >= 60);
-	amin3 = aminshi3 * 10 + aminge3;
-	delay(1000);
-	write_com(0x0c); //������ʾ���ع�꣬����˸
-	write_com(0x80 + 0x40);
-	qi(); //��ʾ����
-}
-
-void alarm44()
-{ //���õ��ĸ�����
-	do
-	{ //����ʱ�ӡ�ʱ������
-		write_com(0x0f);
-		delay(2);
-		write_com(0x80 + 0x40 + 6);
-		scan();
-		ahourshi4 = key;
-		write_data(keyValue[ahourshi4 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			ahourshi4 = 0;
-		}
-		delay(5);
-		write_com(0x80 + 0x40 + 7);
-		scan();
-		ahourge4 = key;
-		delay(2);
-		write_data(keyValue[ahourge4 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			ahourge4 = 0;
-		}
-	} while (ahourshi4 * 10 + ahourge4 >= 24);
-	ahour4 = ahourshi4 * 10 + ahourge4;
-	write_com(0x80 + 0x40 + 8);
-	delay(2);
-	write_data(':');
-	do
-	{ //ϵͳʱ�ӡ��֡�����
-		write_com(0x0f);
-		delay(2);
-		write_com(0x80 + 0x40 + 9);
-		scan();
-		aminshi4 = key;
-		write_data(keyValue[aminshi4 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			aminshi4 = 0;
-		}
-		delay(5);
-		scan();
-		aminge4 = key;
-		write_com(0x80 + 0x40 + 10);
-		delay(2);
-		write_data(keyValue[aminge4 - 1]);
-		if (key == 11)
-		{ //�����ϵ�0����Ӧ11������������ᵼ��ѭ������
-			aminge4 = 0;
-		}
-		delay(1);
-	} while (aminshi4 * 10 + aminge4 >= 60);
-	amin4 = aminshi4 * 10 + aminge4;
-	delay(1000);
-	write_com(0x0c); //������ʾ���ع�꣬����˸
-	write_com(0x80 + 0x40);
-	qi(); //��ʾ����
-}
-
+//what is this?
 void keyscan1()
-{ //����ɨ�����
+{
 	if (key1 == 0)
-	{ //���¹��ܼ�key1����ϵͳʱ������
+	{
 		delay(10);
 		if (key1 == 0)
 		{
 			while (!key1)
 				;
-			time(); //����ϵͳʱ�����ú���
+			time();
 		}
 	}
 	else if (key2 == 0)
-	{ //���¹��ܼ�key2�鿴��������
+	{
 		cnt1++;
 		delay(10);
 		if (cnt1 == 1)
 		{
 			write_com(0x80 + 0x40);
 			for (i = 0; i < 6; ++i)
-				write_data(Alarm_1[i]); //��ʾ�������õ�ʱ��
+				write_data(Alarm_1[i]);
 			while (!key2)
 			{
 				ahourge1 = ahour1 % 10;
@@ -564,7 +325,7 @@ void keyscan1()
 		{
 			write_com(0x80 + 0x40);
 			for (i = 0; i < 6; ++i)
-				write_data(Alarm_2[i]); //��ʾ�������õ�ʱ��
+				write_data(Alarm_2[i]);
 			while (!key2)
 			{
 				ahourge2 = ahour2 % 10;
@@ -593,7 +354,7 @@ void keyscan1()
 		{
 			write_com(0x80 + 0x40);
 			for (i = 0; i < 6; ++i)
-				write_data(Alarm_3[i]); //��ʾ�������õ�ʱ��
+				write_data(Alarm_3[i]);
 			while (!key2)
 			{
 				ahourge3 = ahour3 % 10;
@@ -622,7 +383,7 @@ void keyscan1()
 		{
 			write_com(0x80 + 0x40);
 			for (i = 0; i < 6; ++i)
-				write_data(Alarm_4[i]); //��ʾ�������õ�ʱ��
+				write_data(Alarm_4[i]);
 			while (!key2)
 			{
 				ahourge4 = ahour4 % 10;
@@ -651,7 +412,7 @@ void keyscan1()
 			cnt1 = 0;
 	}
 	else if (key3 == 0)
-	{ //���¹��ܼ�key3������������
+	{
 		cnt++;
 		delay(10);
 		if (cnt == 1)
@@ -769,30 +530,30 @@ void keyscan1()
 		if (cnt > 4)
 			cnt = 0;
 	}
-	else if (key4 == 0) //�¹��ܼ�key4�ر��������ֵ�����
+	else if (key4 == 0)
 		delay(5);
 	if (key4 == 0)
 	{
 		while (!key4)
 			;
-		flag = 0;  //�޸����ӱ�־λ
-		sound = 1; //�ر�������
+		flag = 0;
+		sound = 1;
 	}
 }
-
+//lcd init
 void lcd_init()
-{ //LCD��ʼ��
+{
 	lcden = 0;
 	lcdrw = 0;
-	write_com(0x38); //����8λ��ʽ��2��
-	write_com(0x0c); //������ʾ���ع�꣬����˸
-	write_com(0x06); //�趨���뷽ʽ��������ת��
-	write_com(0x01); //�����Ļ��ʾ
+	write_com(0x38);
+	write_com(0x0c);
+	write_com(0x06);
+	write_com(0x01);
 	delay(2);
 	write_com(0x80);
 	for (i = 0; i < 16; i++)
 	{
-		write_data(table2[i]); //д����ʾʱ������
+		write_data(table2[i]);
 		delay(1);
 	}
 }
@@ -800,7 +561,7 @@ void lcd_init()
 void pannian()
 {
 	if (nian % 400 == 0 || (nian % 4 == 0 && nian % 100 != 0))
-	{ //����Ϊ����
+	{
 		if (yue == 2 && ri == 30)
 		{
 			yue++;
@@ -817,8 +578,8 @@ void pannian()
 			ri = 1;
 		}
 	}
-	else if (!(nian % 400 == 0) || !(nian % 4 == 0 && nian % 100 != 0))
-	{ //����Ϊƽ��
+	else
+	{
 		if (yue == 2 && ri == 29)
 		{
 			yue++;
@@ -863,25 +624,26 @@ void judge()
 }
 
 void init()
-{ //C51��ʼ��
+{
+
 	key1 = 1;
 	key2 = 1;
 	key3 = 1;
 	key4 = 1;
-	sound = 1;
-	TMOD = 0x10; //��ʱ��1�����ڷ�ʽ1
+	sound = 1; //muted
+	TMOD = 0x10;
 	TL1 = 0xB0;
-	TH1 = 0x3C; //������ֵ15536
+	TH1 = 0x3C;
 	EA = 1;
 	ET1 = 1;
 	TR1 = 1;
 }
 
 void speak()
-{ //���ӡ����˵㡱����
+{
+	//check if it is alarm time
 	if ((amin1 == min && ahour1 == hour || (amin2 == min && ((hour >= 7 && hour <= 12) || (hour >= 14 && hour <= 21))) || (amin3 == min && ((hour >= 7 && hour <= 12) || (hour >= 14 && hour <= 21))) || amin4 == min && ahour4 == hour) && flag == 1)
 	{
-		//�κ�һ�����ӡ����㡱���������־λΪ1ʱ��������
 		delay(5);
 		sound = 0;
 	}
@@ -891,15 +653,16 @@ void speak()
 	sound = 1;
 }
 
+//interrupt function
 void led1() interrupt 3
 {
 	TL1 = 0xB0;
 	TH1 = 0x3C;
+	//ticks ticks check if it is alarm time
 	if ((amin1 != min || ahour1 != hour) && (amin2 != min) && (amin3 != min) && (amin4 != min || ahour4 != hour))
 	{
-		//�����κ�һ������ʱ�������������־λΪ1��Ϊ��һ��������׼��
-		flag = 1;
-		sound = 1; //�ر�������
+		flag = 1; //enabled sound
+		sound = 1;
 	}
 	speak();
 	num++;
@@ -917,7 +680,9 @@ void main()
 	init();
 	while (1)
 	{
-		keyscan1(); //����ɨ��
+		//scan
+		keyscan1();
+		//calculate time minutes and display
 		minge = min % 10;
 		minshi = min / 10;
 		write_com(0x80 + 9);
@@ -925,6 +690,8 @@ void main()
 		delay(5);
 		write_com(0x80 + 8);
 		write_data(table1[minshi]);
+
+		//calculate time hours and display
 		hourge = hour % 10;
 		hourshi = hour / 10;
 		write_com(0x80 + 6);
@@ -935,6 +702,8 @@ void main()
 		write_com(0x80 + 7);
 		write_data(':');
 		delay(5);
+
+		//calculate time seconds and display
 		secge = sec % 10;
 		secshi = sec / 10;
 		write_com(0x80 + 15);
@@ -942,6 +711,7 @@ void main()
 		delay(5);
 		write_com(0x80 + 14);
 		write_data(table1[secshi]);
+
 		qi();
 	}
 }
